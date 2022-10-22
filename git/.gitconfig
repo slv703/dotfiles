@@ -1,0 +1,8 @@
+[user]
+	name = Alexander Markov
+	email = aleksandr.b.markov@gmail.com
+[core]
+	editor = nvim
+	excludesfile = /home/alex/dotfiles/git/.gitignore
+[init]
+	defaultBranch = master
