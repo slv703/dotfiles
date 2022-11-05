@@ -1,3 +1,9 @@
+# otherwise backspace, Tab, Del and arrow keys not working in terminal (using ssh)
+export TERM=linux
+
+# terminal prompt
+export PS1="%{$fg[green]%}%n@%m% $%{$reset_color%} "
+
 # path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
 
@@ -29,7 +35,3 @@ alias nvimconf='nvim ~/.config/nvim/init.lua'
 alias packersync="nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'"
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm"
-
-export LETSDEV_REPO=/home/alex/workspace/letsdev2
-alias letsdev=$LETSDEV_REPO/letsdev.rb
-. $LETSDEV_REPO/bash-completions
