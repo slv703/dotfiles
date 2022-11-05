@@ -2,7 +2,7 @@
 export TERM=linux
 
 # terminal prompt
-export PS1="%{$fg[green]%}%n@%m% $%{$reset_color%} "
+export PS1="%{$fg[cyan]%}%n@%m %{$fg[cyan]%}%c%{$reset_color%} $(git_prompt_info)"
 
 # path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
