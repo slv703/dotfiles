@@ -1,9 +1,6 @@
 # otherwise backspace, Tab, Del and arrow keys not working in terminal (using ssh)
 export TERM=linux
 
-# terminal prompt
-export PS1="%{$fg[cyan]%}%n@%m %{$fg[cyan]%}%c%{$reset_color%} $(git_prompt_info)"
-
 # path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
 
@@ -15,6 +12,9 @@ plugins=(git vi-mode)
 
 # oh-my-zsh
 source $ZSH/oh-my-zsh.sh
+
+# terminal prompt
+export PS1="%{$fg[cyan]%}%n@%m %{$fg[cyan]%}%c%{$reset_color%} $(git_prompt_info)"
 
 # ls highlighting
 export LS_COLORS=$LS_COLORS:"ow=36:"
