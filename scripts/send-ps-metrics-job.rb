@@ -32,7 +32,7 @@ loop do
     memory[name] += memory_value
   end
 
-  data = marshal(CPU_METRIC_NAME, cpu) + marshal(MEMORY_METRIC_NAME, memory)
+  data = (marshal(CPU_METRIC_NAME, cpu) + marshal(MEMORY_METRIC_NAME, memory)).join("\n") << "\n"
   RestClient.post(PUSHGATEWAY_URL, data)
 
   sleep(DELAY)
