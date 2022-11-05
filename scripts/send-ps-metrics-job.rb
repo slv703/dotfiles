@@ -13,7 +13,7 @@ DELAY = 1
 
 def marshal(metric_name, samples)
   samples.map do |key, value|
-    "#{metric_name}{process='#{key}'} #{value}"
+    "#{metric_name}{process=\"#{key}\"} #{value}"
   end
 end
 
