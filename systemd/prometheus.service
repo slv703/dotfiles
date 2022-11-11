@@ -1,0 +1,16 @@
+[Unit]
+Description=Prometheus
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=alex
+Type=simple
+ExecStart=/home/alex/programs/prometheus/prometheus \
+    --config.file /home/alex/programs/prometheus/prometheus.yml \
+    --storage.tsdb.path /home/alex/programs/prometheus/ \
+    --web.console.templates=/home/alex/programs/prometheus/consoles \
+    --web.console.libraries=/home/alex/programs/prometheus/console_libraries
+
+[Install]
+WantedBy=multi-user.target
