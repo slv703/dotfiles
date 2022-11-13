@@ -1,0 +1,21 @@
+---
+- name: Install Ruby
+  hosts: all
+  remote_user: admin
+  become: yes
+  tasks:
+    - name: Check if Ruby is installed
+      command: which ruby
+      register: ruby_check
+      ignore_errors: yes
+
+    - block:
+      - name: Update the system
+        apt: update_cache=true
+
+      - name: Install ruby
+        ansible.builtin.apt:
+          name: ruby
+          state: present
+
+      when: ruby_check.rc != 0
