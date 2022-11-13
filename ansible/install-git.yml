@@ -1,0 +1,21 @@
+---
+- name: Install git
+  hosts: all
+  remote_user: admin
+  become: yes
+  tasks:
+    - name: Check if package is installed
+      command: which git
+      register: package_check
+      ignore_errors: yes
+
+    - block:
+      - name: Update the system
+        apt: update_cache=true
+
+      - name: Install package
+        ansible.builtin.apt:
+          name: git
+          state: present
+
+      when: package_check.rc != 0
