@@ -1,6 +1,7 @@
 ---
 - name: Clone or update dotfiles
   hosts: all
+  become: yes
   remote_user: admin
   vars:
     repo_url: 'https://github.com/iobitt/dotfiles.git'
@@ -11,3 +12,23 @@
         repo: '{{ repo_url }}'
         dest: ~/dotfiles
         version: '{{ branch }}'
+
+    - name: Create a symbolic link for scripts folder
+      ansible.builtin.file:
+        src: 'dotfiles/scripts'
+        dest: scripts
+        state: link
+
+    - name: Create a symbolic link pushgateway.service
+      ansible.builtin.file:
+        src: '~/dotfiles/systemd/pushgateway.service'
+        dest: /etc/systemd/system/pushgateway.service
+        state: link
+
+    - name: Reload systemd
+      command: systemctl daemon-reload
+
+    - name: Make sure a service unit is running
+      ansible.builtin.systemd:
+        state: started
+        name: pushgateway
