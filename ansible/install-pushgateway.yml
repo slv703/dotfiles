@@ -1,0 +1,43 @@
+---
+- name: Install pushgateway
+  hosts: all
+  remote_user: admin
+  vars:
+    version: '1.4.3'
+    pushgateway_folder: 'pushgateway-{{ version }}.linux-amd64'
+    pushgateway_tgz: '{{ pushgateway_folder }}.tar.gz'
+  tasks:
+  - name: Pushgateway exists
+    stat:
+      path: '{{ pushgateway_folder }}'
+    register: pushgateway_exists
+
+  - name: pushgateway.tar.gz exists
+    stat:
+      path: '{{ pushgateway_tgz }}'
+    register: pushgateway_tgz_exists
+
+  - name: Download pushgateway
+    ansible.builtin.get_url:
+      url: 'https://github.com/prometheus/pushgateway/releases/download/v{{ version }}/{{ pushgateway_tgz }}'
+      dest: '.'
+    when: (not pushgateway_exists.stat.exists) and (not pushgateway_tgz_exists.stat.exists)
+
+  - name: Extract pushgateway.tar.gz
+    ansible.builtin.unarchive:
+      src: '{{ pushgateway_tgz }}'
+      dest: .
+      remote_src: yes
+    register: pushgateway_tgz_extract_result
+    when: not pushgateway_exists.stat.exists
+
+  - name: Create a symbolic link
+    ansible.builtin.file:
+      src: '{{ pushgateway_folder }}'
+      dest: pushgateway
+      state: link
+
+  - name: Remove pushgateway.tar.gz
+    ansible.builtin.file:
+      path: '{{ pushgateway_tgz }}'
+      state: absent
