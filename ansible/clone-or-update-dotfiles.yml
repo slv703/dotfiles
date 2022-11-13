@@ -1,0 +1,13 @@
+---
+- name: Clone or update dotfiles
+  hosts: all
+  remote_user: admin
+  vars:
+    repo_url: 'https://github.com/iobitt/dotfiles.git'
+    branch: 'server'
+  tasks:
+    - name: Clone or update dotfiles repo
+      ansible.builtin.git:
+        repo: '{{ repo_url }}'
+        dest: ~/dotfiles
+        version: '{{ branch }}'
