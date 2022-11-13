@@ -4,9 +4,9 @@ Wants=network-online.target
 After=network-online.target
 
 [Service]
-User=alex
+User=admin
 Type=simple
-ExecStart=/home/alex/programs/pushgateway/pushgateway
+ExecStart=/home/admin/pushgateway/pushgateway
 
 [Install]
 WantedBy=multi-user.target
