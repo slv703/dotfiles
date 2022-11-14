@@ -1,0 +1,12 @@
+[Unit]
+Description=SendPsMetrics
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=admin
+Type=simple
+ExecStart=ruby /home/admin/scripts/send-ps-metrics-job.rb
+
+[Install]
+WantedBy=multi-user.target
