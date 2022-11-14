@@ -31,6 +31,9 @@
         dest: /etc/systemd/system/send-ps-metrics.service
         state: link
 
+    - name: Install rest-client
+      command: gem install rest-client
+
     - name: Reload systemd
       command: systemctl daemon-reload
 
