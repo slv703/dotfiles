@@ -25,10 +25,21 @@
         dest: /etc/systemd/system/pushgateway.service
         state: link
 
+    - name: Create a symbolic link send-ps-metrics.service
+      ansible.builtin.file:
+        src: '~/dotfiles/systemd/send-ps-metrics.service'
+        dest: /etc/systemd/system/send-ps-metrics.service
+        state: link
+
     - name: Reload systemd
       command: systemctl daemon-reload
 
-    - name: Make sure a service unit is running
+    - name: Make sure a pushgateway service unit is running
       ansible.builtin.systemd:
         state: started
         name: pushgateway
+
+    - name: Make sure a send-ps-metrics service unit is running
+      ansible.builtin.systemd:
+        state: started
+        name: send-ps-metrics
