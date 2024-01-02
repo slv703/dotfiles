@@ -1,0 +1,6 @@
+require('autocommands/common')
+require('base/common')
+require('base/mappings')
+require('base/search')
+require('base/tabs')
+require('plugins/init')
