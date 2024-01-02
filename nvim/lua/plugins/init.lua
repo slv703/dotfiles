@@ -86,6 +86,7 @@ require("lazy").setup({
   { "numToStr/Comment.nvim" }
 })
 
+require('plugins/nvim_web_devicons')
 require('plugins/oil')
 require('plugins/catppuccian')
 require('plugins/telescope')
