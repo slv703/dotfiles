@@ -36,6 +36,11 @@ require('nvim-web-devicons').setup({
     color = "#f1502f",
     name = "Dockerfile"
   },
+  ["docker-compose.yml"] = {
+    icon = "",
+    color = "#f1502f",
+    name = "DockerCompose"
+  },
   ["config.ru"] = {
     icon = "",
     color = "#f1502f",
