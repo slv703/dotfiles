@@ -1,3 +1,4 @@
+-- Part I. Lazy install
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
@@ -9,9 +10,9 @@ if not vim.loop.fs_stat(lazypath) then
     lazypath,
   })
 end
-
 vim.opt.rtp:prepend(lazypath)
 
+-- Part II. Lazy setup
 require("lazy").setup({
   -- File exploler
   { 'stevearc/oil.nvim', dependencies = { "nvim-tree/nvim-web-devicons" } },
@@ -83,9 +84,13 @@ require("lazy").setup({
   { "nmac427/guess-indent.nvim" },
 
   -- Comment lines with shortcuts
-  { "numToStr/Comment.nvim" }
+  { "numToStr/Comment.nvim" },
+
+  -- Git integration for buffers
+  { "lewis6991/gitsigns.nvim" }
 })
 
+-- Part III. Plugins setup
 require('plugins/nvim_web_devicons')
 require('plugins/oil')
 require('plugins/catppuccian')
@@ -95,3 +100,4 @@ require('auto-save').setup()
 require('which-key').setup()
 require('guess-indent').setup()
 require('Comment').setup()
+require('plugins/gitsigns')
