@@ -28,6 +28,49 @@ require("lazy").setup({
   },
 
   {
+    'nvim-treesitter/nvim-treesitter-context',
+    config = function()
+      require('treesitter-context').setup({
+        patterns = {
+          default = {
+            'class',
+            'function',
+            'method',
+            'for',
+            'while',
+            'if',
+            'else',
+            'switch',
+            'case',
+          },
+          javascript = {
+            'object',
+            'pair',
+          },
+          ruby = {
+            'module',
+            'block'
+          },
+          yaml = {
+            'block_mapping_pair',
+            'block_sequence_item',
+          },
+          json = {
+            'object',
+            'pair',
+          },
+        },
+      })
+    end,
+
+    dependencies = { 'nvim-treesitter/nvim-treesitter' }
+  },
+
+  { 'RRethy/nvim-treesitter-endwise', dependencies = { 'nvim-treesitter/nvim-treesitter' } },
+
+  { 'nvim-treesitter/nvim-treesitter-textobjects', dependencies = { 'nvim-treesitter/nvim-treesitter' } },
+
+  {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
     config = function ()
@@ -87,7 +130,14 @@ require("lazy").setup({
   { "numToStr/Comment.nvim" },
 
   -- Git integration for buffers
-  { "lewis6991/gitsigns.nvim" }
+  { "lewis6991/gitsigns.nvim" },
+
+  -- Ruby slim
+  { 'slim-template/vim-slim' },
+
+  { 'sbdchd/neoformat' },
+
+  { 'stevearc/conform.nvim', opts = {} }
 })
 
 -- Part III. Plugins setup
@@ -101,3 +151,11 @@ require('which-key').setup()
 require('guess-indent').setup()
 require('Comment').setup()
 require('plugins/gitsigns')
+require('plugins/lsp')
+
+require("conform").setup({
+  -- Map of filetype to formatters
+  formatters_by_ft = {
+    ruby = { "rubocop", "codespell" }
+  }
+})
