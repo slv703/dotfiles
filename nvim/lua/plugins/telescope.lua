@@ -10,6 +10,12 @@ require('telescope').setup({
       case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
                                        -- the default case_mode is "smart_case"
     }
+  },
+  pickers = {
+    find_files = {
+      -- hidden = true,
+      -- ignore = true
+    }
   }
 })
 
@@ -18,6 +24,7 @@ require('telescope').load_extension('fzf')
 -- File Pickers
 
 -- Список файлов в текущем рабочем каталоге с учетом .gitignore
+vim.keymap.set("n", "<C-f>", "<Cmd>Telescope find_files<CR>")
 vim.keymap.set("n", "<leader>ff", "<Cmd>Telescope find_files<CR>")
 -- Нечеткий поиск по выводу команды git ls-files с учетом .gitignore
 vim.keymap.set("n", "<leader>gf", "<Cmd>Telescope git_files<CR>")
@@ -38,11 +45,11 @@ vim.keymap.set("n", "<leader>cf", "<Cmd>Telescope current_buffer_fuzzy_find<CR>"
 -- Git Pickers
 
 -- Lists git commits with diff preview
-vim.keymap.set("n", "<leader>gc", "<Cmd>Telescope git_commits<CR>")
+vim.keymap.set("n", "<leader>gm", "<Cmd>Telescope git_commits<CR>")
 -- Lists buffer's git commits with diff preview
-vim.keymap.set("n", "<leader>bgc", "<Cmd>Telescope git_bcommits<CR>")
+vim.keymap.set("n", "<leader>gb", "<Cmd>Telescope git_bcommits<CR>")
 -- Lists buffer's git commits in a range of lines
-vim.keymap.set("v", "<leader>gcr", "<Cmd>Telescope git_bcommits_range<CR>")
+vim.keymap.set("v", "<leader>ge", "<Cmd>Telescope git_bcommits_range<CR>")
 -- Lists all branches with log preview
 vim.keymap.set("n", "<leader>gb", "<Cmd>Telescope git_branches<CR>")
 -- Lists current changes per file with diff preview
