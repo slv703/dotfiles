@@ -8,6 +8,9 @@ require("oil").setup({
     -- "size",
     -- "mtime",
   },
+  view_options = {
+    show_hidden = true
+  }
 })
 
 vim.keymap.set("n", "<leader>fe", "<Cmd>Oil<CR>")
