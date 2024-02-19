@@ -33,6 +33,8 @@ vim.keymap.set("n", "<leader>fs", "<Cmd>Telescope grep_string<CR>")
 -- Поиск строки в текущем рабочем каталоге и выдача результатов по мере ввода, с учётом .gitignore
 vim.keymap.set("n", "<leader>lg", "<Cmd>Telescope live_grep<CR>")
 
+vim.keymap.set("n", "<leader>tt", "<Cmd>Telescope resume<CR>")
+
 -- Vim Pickers
 
 -- Список открытых буферов
