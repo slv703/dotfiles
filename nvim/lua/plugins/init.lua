@@ -109,7 +109,16 @@ require("lazy").setup({
   'hrsh7th/cmp-buffer',
   'hrsh7th/cmp-path',
   'hrsh7th/cmp-cmdline',
-  { 'L3MON4D3/LuaSnip', requires = { 'hrsh7th/nvim-cmp' } },
+
+  {
+      "L3MON4D3/LuaSnip",
+      lazy = false,
+      dependencies = { "saadparwaiz1/cmp_luasnip" },
+      config = function(_, opts)
+          require("luasnip").config.set_config(opts)
+          require("luasnip.loaders.from_snipmate").lazy_load()
+      end,
+  },
 
   -- Autocompletion
   { 'hrsh7th/nvim-cmp', dependencies = { {'L3MON4D3/LuaSnip'} } },
@@ -137,7 +146,9 @@ require("lazy").setup({
 
   { 'sbdchd/neoformat' },
 
-  { 'stevearc/conform.nvim', opts = {} }
+  { 'stevearc/conform.nvim', opts = {} },
+
+  { 'benfowler/telescope-luasnip.nvim' }
 })
 
 -- Part III. Plugins setup
@@ -159,3 +170,7 @@ require("conform").setup({
     ruby = { "rubocop", "codespell" }
   }
 })
+
+require("luasnip.loaders.from_snipmate").lazy_load()
+
+require('plugins/lua_snip')

@@ -1,0 +1,157 @@
+snippet cur_buf
+    `luaeval("current_file_relative_path()")`
+
+snippet !binding
+  binding.pry
+
+snippet !frozen
+  # frozen_string_literal: true
+
+snippet !def
+  def ${1:method_name}
+    ${0:body}
+  end
+
+snippet !mdef
+  def ${1}
+    @${1} ||= ${0}
+  end
+
+snippet !ivdef Instance variable defined memoization
+  def ${1}
+    return @${1} if instance_variable_defined?(:@${1})
+
+    @${1} = ${0}
+  end
+
+snippet !cla class .. end
+  class ${1:`luaeval(substitute(vim.fn.expand('%'), '\(_\|^\)\(.\)', '\u\2', 'g'))`}
+    ${0}
+  end
+
+snippet !mod module .. end
+  module ${1:`substitute(vim_snippets#Filename(), '\(_\|^\)\(.\)', '\u\2', 'g')`}
+    ${0}
+  end
+
+snippet !case
+  case ${1:object}
+  when $2
+    ${0}
+  end
+
+snippet !timeout
+  Timeout.timeout(TIMEOUT) { ${0} }
+
+snippet !cont
+  module ${1}
+    class ${2} < ${3}
+      ${0}
+    end
+  end
+
+snippet !service
+  # frozen_string_literal: true
+
+  class ${1}
+    def self.call(...)
+      new(...).call
+    end
+
+    def call
+      ${0}
+    end
+  end
+
+# Rails
+
+snippet !info
+  logger.info('${1}')
+
+snippet !warn
+  logger.warn('${1}')
+
+snippet !error
+  logger.error('${1}')
+
+snippet !pparams
+  def permitted_params
+    @permitted_params ||= params.require(${1}).permit(${2})
+  end
+
+snippet !ivd instance_variable_defined
+  return @${1} if instance_variable_defined?(:@${1})
+
+# Sidekiq
+
+snippet !sidop
+  sidekiq_options queue: ${1}, retry: ${2}
+
+# Rspec
+
+snippet !factory
+  require "factory_bot"; include FactoryBot::Syntax::Methods; FactoryBot.find_definitions
+
+snippet !desc
+  describe ${1} do
+    ${0}
+  end
+
+snippet !cntx Context
+  context ${1} do
+    before { ${2} }
+
+    it '${3}' do
+      ${0}
+    end
+  end
+
+snippet !it
+  it '${1}' do
+    ${0}
+  end
+
+snippet !fac Create new factory
+  # frozen_string_literal: true
+
+  FactoryBot.define do
+    factory :${1} do
+      ${0}
+    end
+  end
+
+snippet !contacdesc Controller action describe
+  describe '#${1}' do
+    subject(:make_request) { ${2:get}(${1}, params:) }
+
+    let(:params) { {} }
+
+    context '${3}' do
+      it '${4}' do
+        make_request
+        expect(response).to ${0}
+      end
+    end
+  end
+
+snippet !adminscontspec Admins controller template
+  # frozen_string_literal: true
+
+  describe ${1} do
+    let(:admin) { Admin.find(1) }
+
+    before { authenticate_admin(admin) }
+
+    describe '#${2}' do
+      subject(:make_request) { get(${2}, params:) }
+
+      let(:params) { {} }
+
+      context '${3}' do
+        it '${4}' do
+          make_request
+          expect(response).to ${0}
+        end
+      end
+    end
+  end
