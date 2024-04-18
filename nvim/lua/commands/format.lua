@@ -27,3 +27,35 @@ vim.api.nvim_create_user_command(
   { nargs = "?", range = true }
 )
 vim.keymap.set("v", "<leader>esf", ":EqualSignFormat<CR>")
+
+-- Автонумерация выделенных строк
+vim.api.nvim_create_user_command(
+  "Autonumbering",
+  function(opts)
+    local lines = vim.api.nvim_buf_get_lines(0, opts.line1 - 1, opts.line2, false)
+
+    for number, line in pairs(lines) do
+      lines[number] = ("%d. %s"):format(number, line)
+    end
+
+    vim.api.nvim_buf_set_lines(0, opts.line1 - 1, opts.line2, false, lines)
+  end,
+  { nargs = "?", range = true }
+)
+vim.keymap.set("v", "<leader>an", ":Autonumbering<CR>")
+
+-- Удаление нумерации строк
+vim.api.nvim_create_user_command(
+  "DeleteNumbering",
+  function(opts)
+    local lines = vim.api.nvim_buf_get_lines(0, opts.line1 - 1, opts.line2, false)
+
+    for number, line in pairs(lines) do
+      lines[number] = line:gsub("%d+%. ", "")
+    end
+
+    vim.api.nvim_buf_set_lines(0, opts.line1 - 1, opts.line2, false, lines)
+  end,
+  { nargs = "?", range = true }
+)
+vim.keymap.set("v", "<leader>dn", ":DeleteNumbering<CR>")
