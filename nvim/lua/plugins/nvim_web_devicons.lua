@@ -1,7 +1,9 @@
 -- Icons
 -- https://github.com/nvim-tree/nvim-web-devicons
 
-require('nvim-web-devicons').setup({
+return {
+{
+'nvim-tree/nvim-web-devicons',
  -- your personnal icons can go here (to override)
  -- you can specify color or cterm_color instead of specifying both of them
  -- DevIcon will be appended to `name`
@@ -62,4 +64,5 @@ require('nvim-web-devicons').setup({
   --   name = "Log"
   -- }
  };
-})
+}
+}

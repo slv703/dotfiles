@@ -1,114 +1,145 @@
--- require 'lspconfig'.solargraph.setup{}
+return {
+    {
+        "neovim/nvim-lspconfig",
+        event = { "BufReadPre", "BufNewFile" },
+        dependencies = {
+            { "folke/neodev.nvim", opts = {} },
+            -- Package manager
+            {
+                "williamboman/mason.nvim",
+                config = function()
+                    require("mason").setup()
 
--- -- Set colorscheme
--- vim.opt.termguicolors = true
--- vim.cmd.colorscheme('tokyonight')
+                    require("mason-lspconfig").setup({
+                        ensure_installed = {
+                            "solargraph"
+                        },
+                    })
+                end,
+                cmd = "Mason",
+            },
+            { "williamboman/mason-lspconfig.nvim" },
+            -- JSON schemas
+            { "b0o/schemastore.nvim" },
+        },
+        keys = {
+          { "<leader>gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", { noremap = true, silent = true } },
+          { "<leader>gg", "<cmd>lua vim.lsp.buf.definition()<CR>", { noremap = true, silent = true } },
+        },
+        opts = {
+            diagnostics = {
+                config = {
+                    virtual_text = false,
+                    update_in_insert = false,
+                    underline = true,
+                    severity_sort = true,
+                    float = {
+                        source = "always",
+                    },
+                },
+                signs = {
+                    DiagnosticSignError = { text = " ", texthl = "DiagnosticSignError" },
+                    DiagnosticSignWarn = { text = " ", texthl = "DiagnosticSignWarn" },
+                    DiagnosticSignInfo = { text = " ", texthl = "DiagnosticSignInfo" },
+                    DiagnosticSignHint = { text = " ", texthl = "DiagnosticSignHint" },
+                },
+            },
 
--- ---
--- -- LSP setup
--- ---
--- local lsp_zero = require('lsp-zero')
+            on_attach = function(client, bufnr)
+                k.lsp(bufnr, client)
+            end,
+            servers = {
+                jsonls = function(options, _)
+                    options.settings = {
+                        json = {
+                            schemas = require("schemastore").json.schemas(),
+                            validate = { enable = true },
+                        },
+                    }
+                end,
+                yamlls = function(options, _)
+                    options.settings = {
+                        yaml = {
+                            schemas = require("schemastore").yaml.schemas(),
+                            keyOrdering = false,
+                        },
+                    }
+                end,
+                solargraph = function(options, opts)
+                    opts.settings = {
+                        solargraph = {
+                            diagnostics = false,
+                        },
+                    }
 
--- lsp_zero.on_attach(function(client, bufnr)
---   -- see :help lsp-zero-keybindings
---   -- to learn the available actions
---   lsp_zero.default_keymaps({buffer = bufnr})
--- end)
+                    options.on_attach = function(client, bufnr)
+                        opts.on_attach(client, bufnr)
+                    end
+                end,
+                lua_ls = function(_, _)
+                    require("neodev").setup()
+                end,
+                gopls = function(options)
+                    options.settings = {
+                        gopls = {
+                            gofumpt = true,
+                            codelenses = {
+                                gc_details = false,
+                                generate = true,
+                                regenerate_cgo = true,
+                                run_govulncheck = true,
+                                test = true,
+                                tidy = true,
+                                upgrade_dependency = true,
+                                vendor = true,
+                            },
+                            hints = {
+                                assignVariableTypes = true,
+                                compositeLiteralFields = true,
+                                compositeLiteralTypes = true,
+                                constantValues = true,
+                                functionTypeParameters = true,
+                                parameterNames = true,
+                                rangeVariableTypes = true,
+                            },
+                            analyses = {
+                                -- fieldalignment = true,
+                                nilness = true,
+                                unusedparams = true,
+                                unusedwrite = true,
+                                useany = true,
+                            },
+                            usePlaceholders = true,
+                            completeUnimported = true,
+                            staticcheck = true,
+                            directoryFilters = { "-.git", "-node_modules" },
+                            semanticTokens = true,
+                        },
+                    }
+                end,
+            },
+        },
+        config = function(_, opts)
+            for sign, value in pairs(opts.diagnostics.signs) do
+                vim.fn.sign_define(sign, value)
+            end
+            vim.diagnostic.config(opts.diagnostics.config)
 
--- require('mason').setup({})
--- require('mason-lspconfig').setup({
---   handlers = {
---     lsp_zero.default_setup,
---     lua_ls = function()
---       -- (Optional) configure lua language server
---       local lua_opts = lsp_zero.nvim_lua_ls()
---       require('lspconfig').lua_ls.setup(lua_opts)
---     end,
---   }
--- })
+            local lspconfig = require("lspconfig")
+            local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
+            for _, server_name in ipairs(require("mason-lspconfig").get_installed_servers()) do
+                local lsp_opts = {
+                    on_attach = opts.on_attach,
+                    capabilities = capabilities,
+                }
 
--- ---
--- -- Autocompletion config
--- ---
--- local cmp = require('cmp')
--- local cmp_action = lsp_zero.cmp_action()
+                if opts.servers[server_name] then
+                    opts.servers[server_name](lsp_opts, opts)
+                end
 
--- cmp.setup({
---   mapping = cmp.mapping.preset.insert({
---     -- `Enter` key to confirm completion
---     ['<CR>'] = cmp.mapping.confirm({select = false}),
-
---     -- Ctrl+Space to trigger completion menu
---     ['<C-Space>'] = cmp.mapping.complete(),
-
---     -- Navigate between snippet placeholder
---     ['<C-f>'] = cmp_action.luasnip_jump_forward(),
---     ['<C-b>'] = cmp_action.luasnip_jump_backward(),
-
---     -- Scroll up and down in the completion documentation
---     ['<C-u>'] = cmp.mapping.scroll_docs(-4),
---     ['<C-d>'] = cmp.mapping.scroll_docs(4),
---   })
--- })
-
-  -- Set up nvim-cmp.
-  local cmp = require'cmp'
-
-  cmp.setup({
-    snippet = {
-      expand = function(args)
-        require('luasnip').lsp_expand(args.body)
-      end,
+                lspconfig[server_name].setup(lsp_opts)
+            end
+        end,
     },
-    window = {
-      -- completion = cmp.config.window.bordered(),
-      -- documentation = cmp.config.window.bordered(),
-    },
-    mapping = cmp.mapping.preset.insert({
-      ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-      ['<C-f>'] = cmp.mapping.scroll_docs(4),
-      ['<C-Space>'] = cmp.mapping.complete(),
-      ['<C-e>'] = cmp.mapping.abort(),
-      ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-    }),
-    sources = cmp.config.sources({
-      { name = 'nvim_lsp' },
-      { name = 'luasnip' },
-    }, {
-      { name = 'buffer' },
-    })
-  })
+}
 
-  -- Set configuration for specific filetype.
-  cmp.setup.filetype('gitcommit', {
-    sources = cmp.config.sources({
-      { name = 'git' }, -- You can specify the `git` source if [you were installed it](https://github.com/petertriho/cmp-git).
-    }, {
-      { name = 'buffer' },
-    })
-  })
-
-  -- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
-  cmp.setup.cmdline({ '/', '?' }, {
-    mapping = cmp.mapping.preset.cmdline(),
-    sources = {
-      { name = 'buffer' }
-    }
-  })
-
-  -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
-  cmp.setup.cmdline(':', {
-    mapping = cmp.mapping.preset.cmdline(),
-    sources = cmp.config.sources({
-      { name = 'path' }
-    }, {
-      { name = 'cmdline' }
-    })
-  })
-
-  -- Set up lspconfig.
-  local capabilities = require('cmp_nvim_lsp').default_capabilities()
-  -- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
-  require('lspconfig').solargraph.setup {
-    capabilities = capabilities
-  }

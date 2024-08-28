@@ -5,20 +5,38 @@ return {
   {
     'nvim-telescope/telescope.nvim', tag = '0.1.5',
     dependencies = { 'nvim-lua/plenary.nvim' },
-    extensions = {
-      fzf = {
-        case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
-        fuzzy = true,                    -- false will only do exact matching
-        override_file_sorter = true,     -- override the file sorter
-        override_generic_sorter = true,  -- override the generic sorter
-                                         -- the default case_mode is "smart_case"
-      }
-    },
+    config = function()
+      require('telescope').load_extension('fzf')
+      require('telescope').load_extension('luasnip')
+
+      require('telescope').setup({
+        extensions = {
+          fzf = {
+            fuzzy = true,                    -- false will only do exact matching
+            override_generic_sorter = true,  -- override the generic sorter
+            override_file_sorter = true,     -- override the file sorter
+            case_mode = "smart_case",        -- or "ignore_case" or "respect_case" the default case_mode is "smart_case"
+          }
+        },
+        pickers = {
+          find_files = {
+            -- hidden = true,
+            -- ignore = true
+          },
+          treesitter = {
+          }
+        }
+      })
+    end,
+    lazy = false,
     keys = {
       -- File Pickers
 
       -- Список файлов в текущем рабочем каталоге с учетом .gitignore
+      { "<C-f>", "<Cmd>Telescope find_files<CR>" },
       { "<D-f>", "<Cmd>Telescope find_files<CR>" },
+      { "<D-а>", "<Cmd>Telescope find_files<CR>" },
+      { "<leader>ff", "<Cmd>Telescope find_files<CR>" },
 
       -- Нечеткий поиск по выводу команды git ls-files с учетом .gitignore
       { "<leader>gf", "<Cmd>Telescope git_files<CR>" },
@@ -31,6 +49,8 @@ return {
 
       -- Восстановить последний Telescope буффер
       { "<D-t>", "<Cmd>Telescope resume<CR>" },
+      { "<D-s>", "<Cmd>Telescope resume<CR>" },
+      { "<D-ы>", "<Cmd>Telescope resume<CR>" },
 
       -- Vim Pickers
 
@@ -42,6 +62,8 @@ return {
 
       -- Поиск по текущему буфферу
       { "<leader>cf", "<Cmd>Telescope current_buffer_fuzzy_find<CR>" },
+      { "<D-e>", "<Cmd>Telescope current_buffer_fuzzy_find<CR>" },
+      { "<D-у>", "<Cmd>Telescope current_buffer_fuzzy_find<CR>" },
 
       -- Git Pickers
 
@@ -67,12 +89,11 @@ return {
 
       -- Lists Function names, variables, from Treesitter
       { "<leader>ts", "<Cmd>Telescope treesitter<CR>" }
-    },
-    pickers = {
-      find_files = {
-        -- hidden = true,
-        -- ignore = true
-      }
     }
+  },
+
+  {
+    'nvim-telescope/telescope-fzf-native.nvim',
+    build = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build'
   }
 }

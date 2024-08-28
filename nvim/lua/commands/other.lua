@@ -11,11 +11,23 @@ function gitlab_file_url()
   return ("%s/-/blob/master/%s#L%d"):format(os.getenv("INSALES_GITLAB_URL"), file_path, line_number)
 end
 
+function get_class_name_by_path(path)
+  local words_to_delete = { 'app/', 'spec/', 'services/', '_spec', '.rb' }
+
+  for number, word in pairs(words_to_delete) do
+    path = path:gsub(word, '')
+  end
+
+  path = path:gsub('/', '::')
+
+  return change_case(path)
+end
+
 -- Сохраняет Gitlab ссылку на текущий файл в буффере обмена
 vim.api.nvim_create_user_command(
   "GitlabRef",
   function(opts)
-    io.popen(("echo %s | xclip -selection clipboard"):format(gitlab_file_url())):close()
+    io.popen(("echo %s | pbcopy"):format(gitlab_file_url())):close()
   end,
   { nargs = "?", range = false }
 )
@@ -25,7 +37,7 @@ vim.keymap.set("n", "<leader>glr", ":GitlabRef<CR>")
 vim.api.nvim_create_user_command(
   "OpenInGitlab",
   function(opts)
-    io.popen(("xdg-open '%s'"):format(gitlab_file_url())):close()
+    io.popen(("open '%s'"):format(gitlab_file_url())):close()
   end,
   { nargs = "?", range = false }
 )
@@ -36,7 +48,7 @@ vim.api.nvim_create_user_command(
   "CopyPath",
   function(opts)
     local file_path = current_file_relative_path()
-    io.popen(("echo %s | xclip -selection clipboard"):format(file_path)):close()
+    io.popen(("echo %s | pbcopy"):format(file_path)):close()
   end,
   { nargs = "?", range = false }
 )
@@ -75,7 +87,7 @@ vim.api.nvim_create_user_command(
       file_path = file_path:gsub('app', 'spec'):gsub('.rb', '_spec.rb')
     end
 
-    vim.cmd('vsplit term://docker-compose exec insales bundler exec rspec ' .. file_path)
+    vim.cmd('split term://bundler exec rspec -f d ' .. file_path)
   end,
   { nargs = "?", range = false }
 )

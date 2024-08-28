@@ -1,5 +1,5 @@
 snippet cur_buf
-    `luaeval("current_file_relative_path()")`
+  `luaeval("get_class_name_by_path(current_file_relative_path())")`
 
 snippet !binding
   binding.pry
@@ -8,8 +8,8 @@ snippet !frozen
   # frozen_string_literal: true
 
 snippet !def
-  def ${1:method_name}
-    ${0:body}
+  def ${1}
+    ${0}
   end
 
 snippet !mdef
@@ -34,6 +34,13 @@ snippet !mod module .. end
     ${0}
   end
 
+snippet !modcls
+  module ${1}
+    class ${2}
+      ${0}
+    end
+  end
+
 snippet !case
   case ${1:object}
   when $2
@@ -53,12 +60,22 @@ snippet !cont
 snippet !service
   # frozen_string_literal: true
 
-  class ${1}
-    def self.call(...)
-      new(...).call
+  class ${1:`luaeval("get_class_name_by_path(current_file_relative_path())")`}
+    include ActiveModelService
+
+    # Input params
+    attr_accessor ${2}
+
+    # Output params
+    attr_accessor ${3}
+
+    private
+
+    def validate_call
+      ${4}
     end
 
-    def call
+    def perform
       ${0}
     end
   end
@@ -93,7 +110,14 @@ snippet !factory
   require "factory_bot"; include FactoryBot::Syntax::Methods; FactoryBot.find_definitions
 
 snippet !desc
-  describe ${1} do
+  describe ${1:`luaeval("get_class_name_by_path(current_file_relative_path())")`} do
+    ${0}
+  end
+
+snippet !descm
+  describe '.${1}' do
+    subject(:${1}) { described_class.${1} }
+
     ${0}
   end
 
@@ -109,6 +133,19 @@ snippet !cntx Context
 snippet !it
   it '${1}' do
     ${0}
+  end
+
+snippet !sf Spec file
+  # frozen_string_literal: true
+
+  describe ${1:`luaeval("get_class_name_by_path(current_file_relative_path())")`} do
+    describe '#${2}' do
+      subject(:${2}) { described_class.${2} }
+
+      it '${3}' do
+        ${0}
+      end
+    end
   end
 
 snippet !fac Create new factory

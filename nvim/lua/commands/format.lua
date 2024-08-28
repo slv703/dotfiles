@@ -1,5 +1,25 @@
 -- Custom commands for text formating
 
+function change_case(word)
+  local new_word = ''
+
+  -- Detect camelCase
+  if word:find('[a-z][A-Z]') then
+    -- Convert camelCase to snake_case
+    new_word = word:gsub('([a-z])([A-Z])', '%1_%2'):lower()
+    -- Detect snake_case
+  elseif word:find('_[a-z]') then
+    -- Convert snake_case to camelCase
+    new_word = word:gsub('(_)([a-z])', function(_, l) return l:upper() end)
+    new_word = new_word:gsub('(::)([a-z])', function(_, l) return '::' .. l:upper() end)
+    new_word = new_word:gsub('^[a-z]', function(l) return l:upper() end)
+  else
+    print("Not a snake_case or camelCase word")
+  end
+
+  return new_word
+end
+
 -- Выравнивает строки по знаку равенства
 vim.api.nvim_create_user_command(
   "EqualSignFormat",
@@ -59,3 +79,32 @@ vim.api.nvim_create_user_command(
   { nargs = "?", range = true }
 )
 vim.keymap.set("v", "<leader>dn", ":DeleteNumbering<CR>")
+
+
+vim.api.nvim_create_user_command(
+  "ChangeCase",
+  function(opts)
+    local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+    local word = vim.fn.expand('<cword>')
+    local word_start = vim.fn.matchstrpos(vim.fn.getline('.'), '\\k*\\%' .. (col+1) .. 'c\\k*')[2]
+
+    local new_word = ''
+
+    -- Detect camelCase
+    if word:find('[a-z][A-Z]') then
+      -- Convert camelCase to snake_case
+      new_word = word:gsub('([a-z])([A-Z])', '%1_%2'):lower()
+    -- Detect snake_case
+    elseif word:find('_[a-z]') then
+      -- Convert snake_case to camelCase
+      new_word = word:gsub('(_)([a-z])', function(_, l) return l:upper() end)
+      new_word = new_word:gsub('^[a-z]', function(l) return l:upper() end)
+    else
+      print("Not a snake_case or camelCase word")
+    end
+
+    vim.api.nvim_buf_set_text(0, line - 1, word_start, line - 1, word_start + #word, {new_word})
+  end,
+  { nargs = "?", range = true }
+)
+vim.keymap.set("n", "<leader>cc", ":ChangeCase<CR>")

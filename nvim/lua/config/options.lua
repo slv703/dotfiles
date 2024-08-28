@@ -23,6 +23,6 @@ vim.opt.splitbelow = true
 
 -- show trailing whitespaces, tabs
 vim.opt.list = true
-vim.opt.listchars = { trail = '•', nbsp = '␣', extends = '…' }
+vim.opt.listchars = { tab = '▸▸', trail = '•', nbsp = '␣', extends = '…' }
 
 vim.opt.shell='/bin/zsh'
