@@ -1,6 +1,6 @@
 -- Возвращает относительный путь к текущему файлу
 function current_file_relative_path()
-  return vim.api.nvim_buf_get_name(0):gsub(vim.loop.cwd(), ''):sub(2, -1)
+  return vim.api.nvim_buf_get_name(0):gsub("%-", ''):gsub(vim.loop.cwd():gsub("%-", ''), ''):sub(2, -1)
 end
 
 -- Возвращает Gitlab ссылку на текущий файл
@@ -37,7 +37,7 @@ vim.keymap.set("n", "<leader>glr", ":GitlabRef<CR>")
 vim.api.nvim_create_user_command(
   "OpenInGitlab",
   function(opts)
-    io.popen(("open '%s'"):format(gitlab_file_url())):close()
+    io.popen(("xdg-open '%s'"):format(gitlab_file_url())):close()
   end,
   { nargs = "?", range = false }
 )
@@ -48,7 +48,7 @@ vim.api.nvim_create_user_command(
   "CopyPath",
   function(opts)
     local file_path = current_file_relative_path()
-    io.popen(("echo %s | pbcopy"):format(file_path)):close()
+    io.popen(("echo -n %s | xclip -selection clipboard"):format(file_path)):close()
   end,
   { nargs = "?", range = false }
 )
@@ -87,7 +87,7 @@ vim.api.nvim_create_user_command(
       file_path = file_path:gsub('app', 'spec'):gsub('.rb', '_spec.rb')
     end
 
-    vim.cmd('split term://bundler exec rspec -f d ' .. file_path)
+    vim.cmd('split term://docker compose exec insales bundler exec rspec -f d ' .. file_path)
   end,
   { nargs = "?", range = false }
 )
