@@ -1,3 +1,11 @@
+export PATH="$PATH:$HOME/.local/bin"
+
+export PATH=$PATH:$HOME/programs/go/bin
+
+export PATH=$PATH:$HOME/programs/teleport/teleport
+
+# export MAKEFILES=MyMakefile
+
 # Zsh main config
 
 # General settings
@@ -39,6 +47,8 @@ function tshssh {
 # alias cdf="cd \$(find * -type d | fzf)"
 # alias vif="nvim \$(fzf --preview 'bat --style=numbers --color=always --line-range :500 {}')"
 
+alias mk="make -f MyMakefile"
+
 alias ngrok-start="ngrok http 80 --domain=$NGROK_DOMAIN"
 
 # inSales
@@ -72,4 +82,4 @@ alias mm='mattermost-desktop'
 
 # Insales letsdev
 alias letsdev=$INSALES_LETSDEV_REPO/letsdev.rb
-. $INSALES_LETSDEV_REPO/bash-completions
+# . $INSALES_LETSDEV_REPO/bash-completions
