@@ -1,3 +1,6 @@
+-- Nvim Treesitter configurations and abstraction layer
+-- https://github.com/nvim-treesitter/nvim-treesitter
+
 return {
   {
     'nvim-treesitter/nvim-treesitter-context',
@@ -47,7 +50,7 @@ return {
     config = function ()
       local configs = require("nvim-treesitter.configs")
       configs.setup({
-          ensure_installed = { "lua", "javascript", "html", "ruby" },
+          ensure_installed = { "lua", "javascript", "html", "ruby", "go", "yaml" },
           sync_install = false,
           highlight = { enable = true },
           indent = { enable = true },

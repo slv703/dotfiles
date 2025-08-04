@@ -34,9 +34,14 @@ return {
 
       -- Список файлов в текущем рабочем каталоге с учетом .gitignore
       { "<C-f>", "<Cmd>Telescope find_files<CR>" },
+      { "<M-f>", "<Cmd>Telescope find_files<CR>" },
       { "<D-f>", "<Cmd>Telescope find_files<CR>" },
       { "<D-а>", "<Cmd>Telescope find_files<CR>" },
       { "<leader>ff", "<Cmd>Telescope find_files<CR>" },
+
+      { "<M-b>", "<Cmd>Telescope buffers<CR>" },
+
+      { "<M-c>", "<Cmd>Telescope git_status<CR>" },
 
       -- Нечеткий поиск по выводу команды git ls-files с учетом .gitignore
       { "<leader>gf", "<Cmd>Telescope git_files<CR>" },
@@ -46,24 +51,33 @@ return {
 
       -- Поиск строки в текущем рабочем каталоге и выдача результатов по мере ввода, с учётом .gitignore
       { "<D-g>", "<Cmd>Telescope live_grep<CR>" },
+      { "<M-g>", "<Cmd>Telescope live_grep<CR>" },
 
       -- Восстановить последний Telescope буффер
       { "<D-t>", "<Cmd>Telescope resume<CR>" },
       { "<D-s>", "<Cmd>Telescope resume<CR>" },
       { "<D-ы>", "<Cmd>Telescope resume<CR>" },
+      { "<M-s>", "<Cmd>Telescope resume<CR>" },
+      { "<M-ы>", "<Cmd>Telescope resume<CR>" },
 
       -- Vim Pickers
 
       -- Список открытых буферов
       { "<D-b>", "<Cmd>Telescope buffers<CR>" },
+      { "<C-b>", "<Cmd>Telescope buffers<CR>" },
 
       -- Ранее открытые файлы
       { "<D-o>", "<Cmd>Telescope oldfiles<CR>" },
+      { "<M-o>", "<Cmd>Telescope oldfiles<CR>" },
+      { "<leader>o", "<Cmd>Telescope oldfiles<CR>" },
 
       -- Поиск по текущему буфферу
       { "<leader>cf", "<Cmd>Telescope current_buffer_fuzzy_find<CR>" },
+      { "<leader>e", "<Cmd>Telescope current_buffer_fuzzy_find<CR>" },
       { "<D-e>", "<Cmd>Telescope current_buffer_fuzzy_find<CR>" },
+      { "<M-e>", "<Cmd>Telescope current_buffer_fuzzy_find<CR>" },
       { "<D-у>", "<Cmd>Telescope current_buffer_fuzzy_find<CR>" },
+      { "<M-у>", "<Cmd>Telescope current_buffer_fuzzy_find<CR>" },
 
       -- Git Pickers
 
@@ -78,9 +92,7 @@ return {
 
       -- Lists all branches with log preview
       { "<leader>gb", "<Cmd>Telescope git_branches<CR>" },
-
-      -- Lists current changes per file with diff preview
-      { "<leader>gs", "<Cmd>Telescope git_status<CR>" },
+      { "<leader>gbb", "<Cmd>Telescope git_branches<CR>" },
 
       -- Lists stash items in current repository with ability to apply them
       { "<leader>gh", "<Cmd>Telescope git_stash<CR>" },

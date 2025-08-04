@@ -12,6 +12,7 @@ return {
 
       vim.keymap.set("i", "<D-k>", function() ls.expand() end, { silent = true })
       vim.keymap.set({ "i", "s" }, "<D-l>", function() ls.jump(1) end, { silent = true })
+      vim.keymap.set({ "i", "s" }, "<M-l>", function() ls.jump(1) end, { silent = true })
       vim.keymap.set({ "i", "s" }, "<D-j>", function() ls.jump(-1) end, { silent = true })
 
       vim.keymap.set({"i", "s"}, "<D-e>", function()
