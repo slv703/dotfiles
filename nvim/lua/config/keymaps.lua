@@ -85,5 +85,28 @@ vim.keymap.set("n", "<Esc><Esc>", "<C-w>c")
 vim.keymap.set("v", "<", "<gv")
 vim.keymap.set("v", ">", ">gv")
 
+function set_russian_keymap()
+  vim.opt.keymap = 'russian-jcukenwin'
+end
+
+function set_default_keymap()
+  vim.opt.keymap = ''
+end
+
+function change_keymap()
+  local current_keymap = vim.opt.keymap:get()
+
+  if current_keymap == '' then
+    set_russian_keymap()
+  else
+    set_default_keymap()
+  end
+end
+
+vim.api.nvim_set_keymap('n', '<leader>ru', ':lua set_russian_keymap()<CR>', { noremap = true })
+vim.api.nvim_set_keymap('n', '<leader>en', ':lua set_default_keymap()<CR>', { noremap = true })
+vim.api.nvim_set_keymap('n', '<leader>jj', ':lua change_keymap()<CR>', { noremap = true })
+vim.api.nvim_set_keymap('n', '<leader>оо', ':lua change_keymap()<CR>', { noremap = true })
+
 -- inoremap <silent><expr> <TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 -- inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
